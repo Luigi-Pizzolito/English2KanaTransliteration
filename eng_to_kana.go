@@ -20,14 +20,18 @@ type EngToKana struct {
 //go:embed cmu_ipa.json
 var dbFile string
 
-func (e *EngToKana) Init(strictClean ...bool) {
-	// Start english cleaner with default non-strict cleaning
+func NewEngToKana(strictClean ...bool) *EngToKana {
+	// Instantiate class
+	e := EngToKana{}
+
+	// Set english cleaner with default non-strict cleaning
 	var strictF bool
 	if len(strictClean) > 0 {
 		strictF = strictClean[0]
 	}
 	clean := NewEnglishCleaner(strictF)
-	// Start other classes and link function pointers
+
+	// Set other classes and link function pointers
 	e.cleanFn = clean.Clean
 	vowel := NewVowelConverter()
 	e.vowelFn = vowel.ConvertVowel
@@ -39,10 +43,16 @@ func (e *EngToKana) Init(strictClean ...bool) {
 	e.moraeFn = morae.CreateMorae
 	kana := NewMoraeKanaConverter()
 	e.kanaFn = kana.ConvertMorae
+
+	// Load cmu_ipa english phoneme pronounce dictionary
+	e.loadDB()
+
+	// Return instance
+	return &e
 }
 
 // LoadDBFromFile loads the JSON file containing the database.
-func (e *EngToKana) LoadDB() error {
+func (e *EngToKana) loadDB() error {
 	// Unmarshal the JSON data into a map[string][]string
 	if err := json.Unmarshal([]byte(dbFile), &e.db); err != nil {
 		return err
