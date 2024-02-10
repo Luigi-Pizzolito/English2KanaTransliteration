@@ -3,6 +3,8 @@ Convert English phrases into phonetic Japanese kana approximations; also known a
 
 Based on the English to Katakana transcription code written in Python by [Yoko Harada (@yokolet)](https://github.com/yokolet/transcript) Please see that repo for details on the phonetic conversion.
 
+English to phoneme conversion based on [CMUDict](https://people.umass.edu/nconstan/CMU-IPA/). Kanji to Katakana convertion based on [KANJIDIC2](http://nihongo.monash.edu/kanjidic2/index.html). Thanks to [JMDict](https://pkg.go.dev/github.com/foosoft/jmdict).Please refer to those licenses for non-free implementations.
+
 It is a port in Golang with some additional functions:
 - Filtering functions to split, parse, and rejoin sentences which contain punctuation or improper contractions.
 
