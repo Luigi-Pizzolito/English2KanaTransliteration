@@ -71,8 +71,17 @@ Hello~ こんにちは、 ヘロー, 你好! World! 山川。木田
 ### Note for using with Japanese-only text-to-speech (TTS)
 This module is intended to allow TTS which only support Japanese to speak english (such as AquesTalk, Softalk, etc). These TTS usually have some limitations in what punctuation may be present in the input; with only commas and stops being interpreted as a pause and all other punctuation causing an error.
 
-To use this module for such TTS input, you may enable *strict input cleaning mode* by passing a bool in the initialiser:
+To use this module for such TTS input, you may enable *strict input cleaning mode* (only Japanese comma and stop on output) by passing a bool in the initialiser:
 ```go
 // Create an instance of EngToKana
 engToKana := NewEngToKana(true)
+```
+You may also use the function `convertToJapanesePunctuationRestricted` instead of `convertToJapanesePunctuation`:
+```go
+kanjiSplitter := NewKanjiSplitter(
+	kanjiToKana.Convert,					// Kanji callback
+	hiraganaToKana.Convert,					// Gana & Kana callback
+	engToKana.TranscriptSentence,			// English callback
+	convertToJapanesePunctuationRestricted,	// Punctuation callback
+)
 ```
