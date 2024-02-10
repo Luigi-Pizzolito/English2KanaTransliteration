@@ -262,7 +262,7 @@ func (vc *VowelConverter) ConvertVowel(word, ph string) string {
 		"j":   vc.jRule,
 	}
 
-	result := ""
+	var result strings.Builder
 	wIdx, pIdx := 0, 0
 	
 	phS, wordS := NewRuneString(ph), NewRuneString(word)
@@ -275,7 +275,7 @@ func (vc *VowelConverter) ConvertVowel(word, ph string) string {
 		}
 		// adds consonant phonetics to the result, but does nothing for now
 		for pIdx < phS.Len() && !strings.Contains(vc.vowsyms, phS.CharAt(pIdx)) {
-			result += phS.CharAt(pIdx)
+			result.WriteString(phS.CharAt(pIdx))
 			pIdx++
 		}
 		// convert vowel phonetics
@@ -284,19 +284,19 @@ func (vc *VowelConverter) ConvertVowel(word, ph string) string {
 				wIdx++
 			}
 			if pIdx+3 <= phS.Len() && stringInMapKey(phS.Substring(pIdx,pIdx+3),vowelMap) {
-				result += vowelMap[phS.Substring(pIdx,pIdx+3)](wordS.String(),wIdx)
+				result.WriteString(vowelMap[phS.Substring(pIdx,pIdx+3)](wordS.String(),wIdx))
 				pIdx += 3
 				wIdx++
 			} else if pIdx+2 <= phS.Len() && stringInMapKey(phS.Substring(pIdx,pIdx+2),vowelMap) && (pIdx+2 == phS.Len() || phS.CharAt(pIdx+1) != "ɹ" || !strings.Contains(vc.vowsyms, phS.CharAt(pIdx+2)) ) {
-				result += vowelMap[phS.Substring(pIdx,pIdx+2)](wordS.String(),wIdx)
+				result.WriteString(vowelMap[phS.Substring(pIdx,pIdx+2)](wordS.String(),wIdx))
 				pIdx += 2
 				wIdx++
 			} else if pIdx < phS.Len() && stringInMapKey(phS.CharAt(pIdx),vowelMap) {
-				result += vowelMap[phS.CharAt(pIdx)](wordS.String(),wIdx)
+				result.WriteString(vowelMap[phS.CharAt(pIdx)](wordS.String(),wIdx))
 				pIdx++
 				wIdx++
 			} else if pIdx == phS.Len()-1 && phS.CharAt(pIdx) == "j"{
-				result += vowelMap[phS.CharAt(pIdx)](wordS.String(),wIdx)
+				result.WriteString(vowelMap[phS.CharAt(pIdx)](wordS.String(),wIdx))
 				pIdx++
 				wIdx++
 			}
@@ -310,11 +310,11 @@ func (vc *VowelConverter) ConvertVowel(word, ph string) string {
 
 	// adds rest of consonant symbols
 	for pIdx < phS.Len() {
-		result += phS.CharAt(pIdx)
+		result.WriteString(phS.CharAt(pIdx))
 		pIdx++
 	}
 
-	return result
+	return result.String()
 }
 
 func stringInMapKey(str string, m map[string]func(string, int)string) bool {
