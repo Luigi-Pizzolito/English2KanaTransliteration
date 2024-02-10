@@ -1,2 +1,63 @@
 # English2KanaTransliteration
- Convert english phrases into phonetic japanese kana approximations; also known as Englishru.
+Convert English phrases into phonetic Japanese kana approximations; also known as Englishru. Does not translate English into Japanese, but translates English words into their approximate pronounciations in Japanese.
+
+Based on the English to Katakana transcription code written in Python by [Yoko Harada (@yokolet)](https://github.com/yokolet/transcript) Please see that repo for details on the phonetic conversion.
+
+It is a port in Golang with some additional functions:
+- Filtering functions to split, parse, and rejoin sentences which contain punctuation or improper contractions.
+
+Work in progress:
+- Also **accepts Japanese input**; converts any Kanji characters into their most common Hiragana pronounciation, converts Hiragana into Katakana, leaves Katakana as is.
+
+
+## Usage Example
+Below is an example go file to test this module. It reads input from `stdin`, converts the English sentences into their Japanese transliteration and prints them to `stdout`.
+
+```go
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
+
+func main() {
+	// Create an instance of EngToKana
+	engToKana := NewEngToKana()
+
+	// Listen to stdin indefinitely
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		line, err := reader.ReadString('\n')
+		if err != nil {
+			break // Exit loop on error
+		}
+
+		// Call convertString function with the accumulated line
+		result := engToKana.TranscriptSentence(line)
+
+		// Output the result
+		fmt.Print(result+"\n")
+	}
+}
+```
+
+Sample Output:
+```
+❯ go run .
+Hello there
+ヘローゼアー
+With this program, you can make Japanese text to speech speak in English
+ウィズジスプローラ、ユーキャンメイクジャーンイーズテックストツースピーチスピークインイングシュ
+```
+
+
+### Note for using with Japanese-only text-to-speech (TTS)
+This module is intended to allow TTS which only support Japanese to speak english (such as AquesTalk, Softalk, etc). These TTS usually have some limitations in what punctuation may be present in the input; with only commas and stops being interpreted as a pause and all other punctuation causing an error.
+
+To use this module for such TTS input, you may enable *strict input cleaning mode* by passing a bool in the initialiser:
+```go
+// Create an instance of EngToKana
+engToKana := NewEngToKana(true)
+```
