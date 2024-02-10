@@ -27,6 +27,17 @@ import (
 func main() {
 	// Create an instance of EngToKana
 	engToKana := NewEngToKana()
+	// Create an instance of KanjiToKana
+	kanjiToKana := NewKanjiToKana()
+	// Create an instance of GanaToKana
+	hiraganaToKana := NewHiraganaToKatakana()
+	// Create an instance of KanjiSplitter
+	kanjiSplitter := NewKanjiSplitter(
+		kanjiToKana.Convert,			// Kanji callback
+		hiraganaToKana.Convert,			// Gana & Kana callback
+		engToKana.TranscriptSentence,	// English callback
+		convertToJapanesePunctuation,	// Punctuation callback
+	)
 
 	// Listen to stdin indefinitely
 	reader := bufio.NewReader(os.Stdin)
@@ -37,7 +48,7 @@ func main() {
 		}
 
 		// Call convertString function with the accumulated line
-		result := engToKana.TranscriptSentence(line)
+		result := kanjiSplitter.SeparateAndProcess(line)
 
 		// Output the result
 		fmt.Print(result+"\n")
@@ -52,6 +63,8 @@ Hello there
 ヘローゼアー
 With this program, you can make Japanese text to speech speak in English
 ウィズジスプローラ、ユーキャンメイクジャーンイーズテックストツースピーチスピークインイングシュ
+Hello~ こんにちは、 ヘロー, 你好! World! 山川。木田
+ヘロー〜　コンニチハ、　ヘロー、　ジコウ！　ワールド！　サンセン。ボクデン
 ```
 
 

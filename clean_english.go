@@ -29,10 +29,48 @@ func (ce *CleanEnglish) Clean(line string, processCallback func(string)string) s
 // TODO: Implement this function handing replacements from english to japanese punctuation
 func (ce *CleanEnglish) simpleClean(line string, processCallback func(string)string) string {
 	// Initial input clean
+	inputString := ce.removeNonAlphaKeepSomePuncMore(line)
 	// Perform fragment splitting
+	// Split the input string by '.' and ',' and other characters
+	pattern := regexp.MustCompile(`([?!;:\-~,.])`)
+	fields := pattern.Split(inputString, -1)
+
 	segments := []Segment{}
+	ind := 0
+	for _, segment := range fields {
+		ind += len(segment)+1
+		segment = strings.TrimSpace(segment)
+		if ind < len(inputString)-1 {
+			indc := ind
+			for inputString[indc] == ' ' {
+				indc--
+			}
+			segment += string(inputString[indc])
+		}
+		
+		if segment != "" {
+			if strings.HasSuffix(segment, "?") || strings.HasSuffix(segment, "!") || strings.HasSuffix(segment, ";") || strings.HasSuffix(segment, ":") || strings.HasSuffix(segment, "-") || strings.HasSuffix(segment, "~") || strings.HasSuffix(segment, ",") {
+				segments = append(segments, Segment{Text: segment[:len(segment)-1], Type: "text"})
+				segments = append(segments, Segment{Type: convertToJapanesePunctuation(string(ce.getLastRune(segment)))})
+			} else if strings.HasSuffix(segment, ".") {
+				segments = append(segments, Segment{Text: segment[:len(segment)-1], Type: "text"})
+				segments = append(segments, Segment{Type: "。"})
+			} else {
+				segments = append(segments, Segment{Text: segment, Type: "text"})
+			}
+		}
+	}
 	// Process segments
 	return ce.processSegments(segments, processCallback)
+}
+
+func (ce *CleanEnglish) getLastRune(str string) rune {
+	runes := []rune(str)
+	if len(runes) == 0 {
+		// Handle empty string case
+		return 0
+	}
+	return runes[len(runes)-1]
 }
 
 // Function to perform strict punctuation cleaning; commas and stops only
