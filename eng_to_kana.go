@@ -1,6 +1,7 @@
 package main
 
 import (
+	"strings"
 	"encoding/json"
 	_ "embed"
 )
@@ -8,6 +9,7 @@ import (
 // EngToKana struct holds the necessary functions for English to Katakana conversion
 type EngToKana struct {
 	db             map[string][]string
+	cleanFn		   func(string,func(string)string) string
 	vowelFn        func(string, string) string
 	consonantFn    func(string, string) string
 	epentheticFn   func(string) string
@@ -18,7 +20,15 @@ type EngToKana struct {
 //go:embed cmu_ipa.json
 var dbFile string
 
-func (e *EngToKana) Init() {
+func (e *EngToKana) Init(strictClean ...bool) {
+	// Start english cleaner with default non-strict cleaning
+	var strictF bool
+	if len(strictClean) > 0 {
+		strictF = strictClean[0]
+	}
+	clean := NewEnglishCleaner(strictF)
+	// Start other classes and link function pointers
+	e.cleanFn = clean.Clean
 	vowel := NewVowelConverter()
 	e.vowelFn = vowel.ConvertVowel
 	consonant := NewConsonantConverter()
@@ -42,10 +52,10 @@ func (e *EngToKana) LoadDB() error {
 }
 
 // Transcript converts an English word to Katakana
-func (e *EngToKana) Transcript(word string) []string {
+func (e *EngToKana) TranscriptWord(word string) string {
 	phs, ok := e.db[word]
 	if !ok {
-		return []string{"E_DIC"}
+		return "E_DIC"
 	}
 
 	var result []string
@@ -57,17 +67,26 @@ func (e *EngToKana) Transcript(word string) []string {
 		kana := e.kanaFn(morae)
 		result = append(result, kana)
 	}
-	return result
+	return result[0]
 }
 
-// FromWordList processes a list of words
-func (e *EngToKana) FromWordList(words []string) [][]string {
-	var result [][]string
-	for _, w := range words {
-		transcript := e.Transcript(w)
-		if len(transcript) > 0 {
-			result = append(result, transcript)
-		}
+func (e *EngToKana) TranscriptSentence(line string) string {
+	// Clean string with call back to process clean sentence fragment
+	return e.cleanFn(line, e.transcriptCleanSentenceFragment)
+}
+
+// processes a line of text containing English words into Kana
+func (e *EngToKana) transcriptCleanSentenceFragment(line string) string {
+	var result strings.Builder
+	words := strings.Fields(line)
+
+	// Iterate over the words and convert each to Katakana
+	for _, word := range words {
+		katakanaWords := e.TranscriptWord(word)
+		// Placeholder logic to join Katakana words
+		result.WriteString(katakanaWords)
+
+		// TODO: Recover func call in case of E_DIC
 	}
-	return result
+	return result.String()
 }
