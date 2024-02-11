@@ -17,7 +17,7 @@ type EngToKana struct {
 	kanaFn         func(string) string
 }
 
-//go:embed cmu_ipa.json
+//go:embed dict/cmu_ipa.json
 var dbFile string
 
 func NewEngToKana(strictClean ...bool) *EngToKana {

@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-//go:embed kanjidic2_pronounce.json
+//go:embed dict/kanjidic2_pronounce.json
 var kanjiMapFile string
 
 // KanjiToKana is a struct representing the Kanji to Kana converter
