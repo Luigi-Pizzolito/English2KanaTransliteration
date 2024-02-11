@@ -11,8 +11,8 @@ type cleanEnglish struct {
 	apostropheMapping	map[string]string
 }
 
-// segment represents a text segment with a type
-type segment struct {
+// stingSegment represents a text segment with a type
+type stringSegment struct {
 	Text string
 	Type string
 }
@@ -34,7 +34,7 @@ func (ce *cleanEnglish) simpleClean(line string, processCallback func(string)str
 	pattern := regexp.MustCompile(`([?!;:\-~,.])`)
 	fields := pattern.Split(inputString, -1)
 
-	segments := []segment{}
+	segments := []stringSegment{}
 	ind := 0
 	for _, segment := range fields {
 		ind += len(segment)+1
@@ -49,13 +49,13 @@ func (ce *cleanEnglish) simpleClean(line string, processCallback func(string)str
 		
 		if segment != "" {
 			if strings.HasSuffix(segment, "?") || strings.HasSuffix(segment, "!") || strings.HasSuffix(segment, ";") || strings.HasSuffix(segment, ":") || strings.HasSuffix(segment, "-") || strings.HasSuffix(segment, "~") || strings.HasSuffix(segment, ",") {
-				segments = append(segments, segment{Text: segment[:len(segment)-1], Type: "text"})
-				segments = append(segments, segment{Type: convertToJapanesePunctuation(string(ce.getLastRune(segment)))})
+				segments = append(segments, stringSegment{Text: segment[:len(segment)-1], Type: "text"})
+				segments = append(segments, stringSegment{Type: convertToJapanesePunctuation(string(ce.getLastRune(segment)))})
 			} else if strings.HasSuffix(segment, ".") {
-				segments = append(segments, segment{Text: segment[:len(segment)-1], Type: "text"})
-				segments = append(segments, segment{Type: "。"})
+				segments = append(segments, stringSegment{Text: segment[:len(segment)-1], Type: "text"})
+				segments = append(segments, stringSegment{Type: "。"})
 			} else {
-				segments = append(segments, segment{Text: segment, Type: "text"})
+				segments = append(segments, stringSegment{Text: segment, Type: "text"})
 			}
 		}
 	}
@@ -81,7 +81,7 @@ func (ce *cleanEnglish) strictPunctClean(line string, processCallback func(strin
 	pattern := regexp.MustCompile(`([?!;:\-~,.])`)
 	fields := pattern.Split(inputString, -1)
 
-	segments := []segment{}
+	segments := []stringSegment{}
 	ind := 0
 	for _, segment := range fields {
 		ind += len(segment)+1
@@ -96,13 +96,13 @@ func (ce *cleanEnglish) strictPunctClean(line string, processCallback func(strin
 		
 		if segment != "" {
 			if strings.HasSuffix(segment, "?") || strings.HasSuffix(segment, "!") || strings.HasSuffix(segment, ";") || strings.HasSuffix(segment, ":") || strings.HasSuffix(segment, "-") || strings.HasSuffix(segment, "~") || strings.HasSuffix(segment, ",") {
-				segments = append(segments, segment{Text: segment[:len(segment)-1], Type: "text"})
-				segments = append(segments, segment{Type: "、"})
+				segments = append(segments, stringSegment{Text: segment[:len(segment)-1], Type: "text"})
+				segments = append(segments, stringSegment{Type: "、"})
 			} else if strings.HasSuffix(segment, ".") {
-				segments = append(segments, segment{Text: segment[:len(segment)-1], Type: "text"})
-				segments = append(segments, segment{Type: "。"})
+				segments = append(segments, stringSegment{Text: segment[:len(segment)-1], Type: "text"})
+				segments = append(segments, stringSegment{Type: "。"})
 			} else {
-				segments = append(segments, segment{Text: segment, Type: "text"})
+				segments = append(segments, stringSegment{Text: segment, Type: "text"})
 			}
 		}
 	}
@@ -110,7 +110,7 @@ func (ce *cleanEnglish) strictPunctClean(line string, processCallback func(strin
 	return ce.processSegments(segments, processCallback)
 }
 
-func (ce *cleanEnglish) processSegments(segments []segment, processCallback func(string)string) string {
+func (ce *cleanEnglish) processSegments(segments []stringSegment, processCallback func(string)string) string {
 	// Process the struct slices
 	var outputString strings.Builder
 	for _, structSlice := range segments {
