@@ -15,6 +15,7 @@ type EngToKana struct {
 	epentheticFn   func(string) string
 	moraeFn        func(string) string
 	kanaFn         func(string) string
+	recoverFn	   func(string) string
 }
 
 //go:embed dict/cmu_ipa.json
@@ -43,6 +44,8 @@ func NewEngToKana(strictClean ...bool) *EngToKana {
 	e.moraeFn = morae.CreateMorae
 	kana := NewMoraeKanaConverter()
 	e.kanaFn = kana.ConvertMorae
+	r2k := NewRomajiToKana(strictF)
+	e.recoverFn = r2k.Convert
 
 	// Load cmu_ipa english phoneme pronounce dictionary
 	e.loadDB()
@@ -65,7 +68,9 @@ func (e *EngToKana) loadDB() error {
 func (e *EngToKana) TranscriptWord(word string) string {
 	phs, ok := e.db[word]
 	if !ok {
-		return "E_DIC"
+		// return "E_DIC"
+		// If no match found, try to recover by using Romaji2Kana
+		return e.recoverFn(word)
 	}
 
 	var result []string

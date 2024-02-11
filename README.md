@@ -1,5 +1,5 @@
 # English2KanaTransliteration
-Convert English phrases into phonetic Japanese kana approximations; also known as Englishru. Does not translate English into Japanese, but translates English words into their approximate pronounciations in Japanese. *No dependencies!*
+Convert English phrases into phonetic Japanese kana approximations; also known as Englishru. Does not translate English into Japanese, but translates English words into their approximate pronounciations in Japanese.
 
 Based on the English to Katakana transcription code written in Python by [Yoko Harada (@yokolet)](https://github.com/yokolet/transcript) Please see that repo for details on the phonetic conversion.
 
@@ -7,9 +7,9 @@ English to phoneme conversion based on [CMUDict](https://people.umass.edu/nconst
 
 It is a port in Golang with some additional functions:
 - Filtering functions to split, parse, and rejoin sentences which contain punctuation or improper contractions.
-
-Work in progress:
 - Also **accepts Japanese input**; converts any Kanji characters into their most common Hiragana pronounciation, converts Hiragana into Katakana, leaves Katakana as is.
+- Also **accepts Romaji input**.
+- *strict input cleaning mode* for use with TTS input that does not understand punctuation and other chars. See header below.
 
 
 ## Usage Example
@@ -52,8 +52,10 @@ Hello there.
 ヘロー　ゼアー。
 With this program, you can make Japanese text to speech speak in English!
 ウィズ　ジス　プローラ、　ユー　キャン　メイク　ジャーンイーズ　テックスト　ツー　スピーチ　スピーク　イン　イングシュ！
-Hello! こんにちは~ ヘロー, 松原。
-ヘロー！　コンニチハ〜　ヘロー、　ショウゲン。
+watashi wa miku desu~
+ワタシ　ワ　ミク　デス〜
+Hello! こんにちは~ ヘロー, miki松原。
+ヘロー！　コンニチハ〜　ヘロー、　ミキショウゲン。
 ```
 
 ### Using individual modules
@@ -87,6 +89,14 @@ hiraganaToKana := NewHiraganaToKatakana()
 kana := hiraganaToKana.Convert("こんにちは")
 ```
 
+#### Romaji2Katakana
+```go
+// Create an instance of RomajiToKana
+romajiToKana := NewRomajiToKana()
+// Usage
+kana := romajiToKana.Convert("kita kita desu")
+```
+
 #### ConvertPunctuation
 ```go
 // Usage
@@ -96,7 +106,7 @@ japanesePunctuation := convertToJapanesePunctuation("Hello, World!")
 ### Note for using with Japanese-only text-to-speech (TTS)
 This module is intended to allow TTS which only support Japanese to speak english (such as AquesTalk, Softalk, etc). These TTS usually have some limitations in what punctuation may be present in the input; with only commas and stops being interpreted as a pause and all other punctuation causing an error.
 
-To use this module for such TTS input, you may enable *strict input cleaning mode* (only Japanese comma and stop on output) by passing a bool in the initialiser for `EngToKana` and `AllToKana` classes:
+To use this module for such TTS input, you may enable *strict input cleaning mode* (only Japanese comma and stop on output) by passing a bool in the initialiser for `EngToKana`, `RomajiToKana` and `AllToKana` classes:
 ```go
 // Create an instance of AllToKana with strict punctuation output
 allToKana := NewAllToKana(true)
@@ -104,6 +114,10 @@ allToKana := NewAllToKana(true)
 ```go
 // Create an instance of EngToKana with strict punctuation output
 engToKana := NewEngToKana(true)
+```
+```go
+// Create an instance of RomajiToKana with strict punctuation output
+romajiToKana := NewRomajiToKana(true)
 ```
 You may also use the function `convertToJapanesePunctuationRestricted` instead of `convertToJapanesePunctuation`.
 
