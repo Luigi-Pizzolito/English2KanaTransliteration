@@ -1,4 +1,7 @@
 # English2KanaTransliteration
+[![Go Reference](https://pkg.go.dev/badge/github.com/Luigi-Pizzolito/English2KanaTransliteration.svg)](https://pkg.go.dev/github.com/Luigi-Pizzolito/English2KanaTransliteration)
+
+
 Convert English phrases into phonetic Japanese kana approximations; also known as Englishru. Does not translate English into Japanese, but translates English words into their approximate pronounciations in Japanese.
 
 Based on the English to Katakana transcription code written in Python by [Yoko Harada (@yokolet)](https://github.com/yokolet/transcript) Please see that repo for details on the phonetic conversion.
