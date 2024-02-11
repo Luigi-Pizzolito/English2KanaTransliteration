@@ -5,28 +5,28 @@ import (
 	"strings"
 )
 
-// struct def
-type CleanEnglish struct {
+// cleanEnglish struct
+type cleanEnglish struct {
 	strictMode			bool
 	apostropheMapping	map[string]string
 }
 
-// Segment represents a text segment with a type
-type Segment struct {
+// segment represents a text segment with a type
+type segment struct {
 	Text string
 	Type string
 }
 
-//? Function to perform cleaning, call back should be eng_to_kana's clean string processor
-func (ce *CleanEnglish) Clean(line string, processCallback func(string)string) string {
+// Clean Function to perform cleaning, and then call the corresponding EngToKana string processor
+func (ce *cleanEnglish) Clean(line string, processCallback func(string)string) string {
 	if ce.strictMode {
 		return ce.strictPunctClean(line, processCallback)
 	}
 	return ce.simpleClean(line, processCallback)
 }
 
-// Function to perform simple cleaning
-func (ce *CleanEnglish) simpleClean(line string, processCallback func(string)string) string {
+// simpleClean Function to perform simple cleaning
+func (ce *cleanEnglish) simpleClean(line string, processCallback func(string)string) string {
 	// Initial input clean
 	inputString := ce.removeNonAlphaKeepSomePuncMore(line)
 	// Perform fragment splitting
@@ -34,7 +34,7 @@ func (ce *CleanEnglish) simpleClean(line string, processCallback func(string)str
 	pattern := regexp.MustCompile(`([?!;:\-~,.])`)
 	fields := pattern.Split(inputString, -1)
 
-	segments := []Segment{}
+	segments := []segment{}
 	ind := 0
 	for _, segment := range fields {
 		ind += len(segment)+1
@@ -49,13 +49,13 @@ func (ce *CleanEnglish) simpleClean(line string, processCallback func(string)str
 		
 		if segment != "" {
 			if strings.HasSuffix(segment, "?") || strings.HasSuffix(segment, "!") || strings.HasSuffix(segment, ";") || strings.HasSuffix(segment, ":") || strings.HasSuffix(segment, "-") || strings.HasSuffix(segment, "~") || strings.HasSuffix(segment, ",") {
-				segments = append(segments, Segment{Text: segment[:len(segment)-1], Type: "text"})
-				segments = append(segments, Segment{Type: convertToJapanesePunctuation(string(ce.getLastRune(segment)))})
+				segments = append(segments, segment{Text: segment[:len(segment)-1], Type: "text"})
+				segments = append(segments, segment{Type: convertToJapanesePunctuation(string(ce.getLastRune(segment)))})
 			} else if strings.HasSuffix(segment, ".") {
-				segments = append(segments, Segment{Text: segment[:len(segment)-1], Type: "text"})
-				segments = append(segments, Segment{Type: "。"})
+				segments = append(segments, segment{Text: segment[:len(segment)-1], Type: "text"})
+				segments = append(segments, segment{Type: "。"})
 			} else {
-				segments = append(segments, Segment{Text: segment, Type: "text"})
+				segments = append(segments, segment{Text: segment, Type: "text"})
 			}
 		}
 	}
@@ -63,7 +63,7 @@ func (ce *CleanEnglish) simpleClean(line string, processCallback func(string)str
 	return ce.processSegments(segments, processCallback)
 }
 
-func (ce *CleanEnglish) getLastRune(str string) rune {
+func (ce *cleanEnglish) getLastRune(str string) rune {
 	runes := []rune(str)
 	if len(runes) == 0 {
 		// Handle empty string case
@@ -73,7 +73,7 @@ func (ce *CleanEnglish) getLastRune(str string) rune {
 }
 
 // Function to perform strict punctuation cleaning; commas and stops only
-func (ce *CleanEnglish) strictPunctClean(line string, processCallback func(string)string) string {
+func (ce *cleanEnglish) strictPunctClean(line string, processCallback func(string)string) string {
 	// Initial input clean
 	inputString := ce.removeNonAlphaKeepSomePuncMore(line)
 	// Perform fragment splitting
@@ -81,7 +81,7 @@ func (ce *CleanEnglish) strictPunctClean(line string, processCallback func(strin
 	pattern := regexp.MustCompile(`([?!;:\-~,.])`)
 	fields := pattern.Split(inputString, -1)
 
-	segments := []Segment{}
+	segments := []segment{}
 	ind := 0
 	for _, segment := range fields {
 		ind += len(segment)+1
@@ -96,13 +96,13 @@ func (ce *CleanEnglish) strictPunctClean(line string, processCallback func(strin
 		
 		if segment != "" {
 			if strings.HasSuffix(segment, "?") || strings.HasSuffix(segment, "!") || strings.HasSuffix(segment, ";") || strings.HasSuffix(segment, ":") || strings.HasSuffix(segment, "-") || strings.HasSuffix(segment, "~") || strings.HasSuffix(segment, ",") {
-				segments = append(segments, Segment{Text: segment[:len(segment)-1], Type: "text"})
-				segments = append(segments, Segment{Type: "、"})
+				segments = append(segments, segment{Text: segment[:len(segment)-1], Type: "text"})
+				segments = append(segments, segment{Type: "、"})
 			} else if strings.HasSuffix(segment, ".") {
-				segments = append(segments, Segment{Text: segment[:len(segment)-1], Type: "text"})
-				segments = append(segments, Segment{Type: "。"})
+				segments = append(segments, segment{Text: segment[:len(segment)-1], Type: "text"})
+				segments = append(segments, segment{Type: "。"})
 			} else {
-				segments = append(segments, Segment{Text: segment, Type: "text"})
+				segments = append(segments, segment{Text: segment, Type: "text"})
 			}
 		}
 	}
@@ -110,7 +110,7 @@ func (ce *CleanEnglish) strictPunctClean(line string, processCallback func(strin
 	return ce.processSegments(segments, processCallback)
 }
 
-func (ce *CleanEnglish) processSegments(segments []Segment, processCallback func(string)string) string {
+func (ce *cleanEnglish) processSegments(segments []segment, processCallback func(string)string) string {
 	// Process the struct slices
 	var outputString strings.Builder
 	for _, structSlice := range segments {
@@ -131,19 +131,19 @@ func (ce *CleanEnglish) processSegments(segments []Segment, processCallback func
 }
 
 // RemoveNonAlpha removes non-alphabetic characters from a string except for apostrophes
-func (ce *CleanEnglish) removeNonAlphaKeepSomePunc(line string) string {
+func (ce *cleanEnglish) removeNonAlphaKeepSomePunc(line string) string {
 	reg := regexp.MustCompile(`[^a-zA-Z' ]`)
 	return reg.ReplaceAllString(line, "")
 }
 
 // RemoveNonAlpha removes non-alphabetic characters from a string except for apostrophes and some punctuation
-func (ce *CleanEnglish) removeNonAlphaKeepSomePuncMore(line string) string {
+func (ce *cleanEnglish) removeNonAlphaKeepSomePuncMore(line string) string {
 	reg := regexp.MustCompile(`[^a-zA-Z?!;:\-~,.' ]`)
 	return reg.ReplaceAllString(line, "")
 }
 
 // Function to replace words with apostrophes
-func (ce *CleanEnglish) replaceApostrophes(line string) string {
+func (ce *cleanEnglish) replaceApostrophes(line string) string {
 	// Iterate over the apostrophe mapping and replace words
 	for word, correctedWord := range ce.apostropheMapping {
 		if strings.Contains(line, word) {
@@ -154,12 +154,12 @@ func (ce *CleanEnglish) replaceApostrophes(line string) string {
 }
 
 // Initialiser
-func NewEnglishCleaner(strictOpt ...bool) *CleanEnglish {
+func newEnglishCleaner(strictOpt ...bool) *cleanEnglish {
 	var optBool bool
 	if len(strictOpt) > 0 {
 		optBool = strictOpt[0]
 	}
-	return &CleanEnglish{
+	return &cleanEnglish{
 		// strict cleaning mode
 		strictMode: optBool,
 		// Dictionary to map words with apostrophes to their proper forms

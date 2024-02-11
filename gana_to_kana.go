@@ -5,19 +5,19 @@ import (
 	"unicode"
 )
 
-// HiraganaToKatakana is a struct representing the Hiragana to Katakana converter
-type HiraganaToKatakana struct{}
+// HiraganaToKana struct holds the necessary functions for Hiragana to Katakana conversion
+type HiraganaToKana struct{}
 
-// NewHiraganaToKatakana creates a new instance of HiraganaToKatakana
-func NewHiraganaToKatakana() *HiraganaToKatakana {
-	return &HiraganaToKatakana{}
+// NewHiraganaToKana creates a new instance of HiraganaToKana
+func NewHiraganaToKana() *HiraganaToKana {
+	return &HiraganaToKana{}
 }
 
 // Convert converts Hiragana characters to Katakana while leaving Katakana characters unchanged
-func (hk *HiraganaToKatakana) Convert(input string) string {
+func (h2k *HiraganaToKana) Convert(input string) string {
 	var result strings.Builder
 	for _, char := range input {
-		if hk.isHiragana(char) {
+		if h2k.isHiragana(char) {
 			// Convert Hiragana to Katakana
 			result.WriteRune(char + 'ァ' - 'ぁ')
 		} else {
@@ -29,7 +29,7 @@ func (hk *HiraganaToKatakana) Convert(input string) string {
 }
 
 // isHiragana checks if a rune is a Hiragana character
-func (hk *HiraganaToKatakana) isHiragana(r rune) bool {
+func (h2k *HiraganaToKana) isHiragana(r rune) bool {
 	// return r >= 'ぁ' && r <= 'ゖ'
 	return unicode.Is(unicode.Hiragana, r)
 }

@@ -2,23 +2,23 @@ package kanatrans
 
 import "fmt"
 
-// RuneString represents a string with Unicode character indexing support
-type RuneString struct {
+// runeString represents a string with Unicode character indexing support
+type runeString struct {
 	value string
 }
 
-// NewRuneString creates a new RuneString object from the given string
-func NewRuneString(s string) *RuneString {
-	return &RuneString{value: s}
+// newRuneString creates a new runeString object from the given string
+func newRuneString(s string) *runeString {
+	return &runeString{value: s}
 }
 
 // Len returns the number of Unicode characters in the string
-func (s *RuneString) Len() int {
+func (s *runeString) Len() int {
 	return len([]rune(s.value))
 }
 
 // CharAt returns the Unicode character at the specified index
-func (s *RuneString) CharAt(index int) string {
+func (s *runeString) CharAt(index int) string {
 	runes := []rune(s.value)
 	if index < 0 || index >= len(runes) {
 		panic("index out of range")
@@ -28,7 +28,7 @@ func (s *RuneString) CharAt(index int) string {
 }
 
 // Substring returns a substring of the original string from index x to y
-func (s *RuneString) Substring(x, y int) string {
+func (s *runeString) Substring(x, y int) string {
 	//! Stupid python, lower bound included, upper bound not included
 	y--
 	if x < 0 || y < 0 || x >= s.Len() || y >= s.Len() || y < x {
@@ -39,6 +39,6 @@ func (s *RuneString) Substring(x, y int) string {
 	return string(runes[x : y+1])
 }
 
-func (s *RuneString) String() string {
+func (s *runeString) String() string {
 	return s.value
 }

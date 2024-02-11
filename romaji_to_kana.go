@@ -6,10 +6,12 @@ import (
 	"unicode"
 )
 
+// RomajiToKana struct holds the necessary functions for Romaji to Kana conversion
 type RomajiToKana struct {
 	strict bool
 }
 
+// NewRomajiToKana creates a new instance of RomajiToKana
 func NewRomajiToKana(strictClean ...bool) *RomajiToKana {
 	// Set cleaner with default non-strict cleaning
 	var strictF bool
@@ -21,6 +23,7 @@ func NewRomajiToKana(strictClean ...bool) *RomajiToKana {
 	}
 }
 
+// Convert converts Romaji to Katakana
 func (r2k *RomajiToKana) Convert(s string) string {
 	out := kana.RomajiToKatakana(kana.NormalizeRomaji(s))
 

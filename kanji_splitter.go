@@ -5,7 +5,7 @@ import (
 	"unicode"
 )
 
-// KanjiSplitter is a class to split a string into segments of Roman, Japanese, and Han text
+// KanjiSplitter is a class to split a string into segments of Roman, Katagana & Hiragana, and Romaji text for individual processing
 type KanjiSplitter struct{
 	kanjiCallback		func(string) string
 	kanaCallback		func(string) string
@@ -24,22 +24,22 @@ func NewKanjiSplitter(kanjiCallback, kanaCallback, romanCallback, punctCallback 
 	return &ks
 }
 
-// SeparateAndProcess separates the input string into segments of Roman, Japanese, and Han text,
+// SeparateAndProcess separates the input string into segments of Roman, Katagana & Hiragana, and Romaji text,
 // and processes each segment accordingly
 func (ks *KanjiSplitter) SeparateAndProcess(input string) string {
 	var result strings.Builder
 
-	// Separate the input string into segments of Roman, Japanese, and Han text
+	// Separate the input string into segments of Roman, Katagana & Hiragana, and Romaji text
 	segments := ks.separateRomanJapaneseAndHan(input)
 
 	// Iterate over the segments
 	for _, segment := range segments {
 		// Process each segment differently based on its content
 		if ks.isJapanese(segment) {
-			// Call the ProcessJapanese function for Japanese segments
+			// Call the ProcessJapanese function for Hiragana & Katakana segments
 			result.WriteString(ks.kanaCallback(segment))
 		} else if ks.isHan(segment) {
-			// Call the ProcessHan function for Han (Chinese) segments
+			// Call the ProcessHan function for Romaji segments
 			result.WriteString(ks.kanjiCallback(segment))
 		} else if ks.isPunctuation(segment) {
 			// Call the function to handle punctuation
@@ -53,7 +53,7 @@ func (ks *KanjiSplitter) SeparateAndProcess(input string) string {
 	return result.String()
 }
 
-// Function to separate the input string into segments of Roman, Japanese, and Han text
+// Function to separate the input string into segments of Roman, Katagana & Hiragana, and Romaji text
 func (ks *KanjiSplitter) separateRomanJapaneseAndHan(input string) []string {
 	var segments []string
 	var currentSegment strings.Builder
@@ -85,7 +85,7 @@ func (ks *KanjiSplitter) separateRomanJapaneseAndHan(input string) []string {
 	return segments
 }
 
-// Function to determine the type of segment (Roman, Japanese, or Han)
+// Function to determine the type of segment (Roman, Katagana & Hiragana, or Romaji)
 func (ks *KanjiSplitter) segmentType(char rune) int {
 	switch {
 	case char >= 'あ' && char <= 'ん':

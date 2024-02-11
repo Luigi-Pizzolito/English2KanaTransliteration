@@ -4,22 +4,22 @@ import (
 	"strings"
 )
 
-// ConsonantConverter handles consonant conversions.
-type ConsonantConverter struct {
+// consonantConverter handles consonant conversions.
+type consonantConverter struct {
 	vowels      string
 	consonants  string
 }
 
-// NewConsonantConverter creates a new instance of ConsonantConverter.
-func NewConsonantConverter() *ConsonantConverter {
-	return &ConsonantConverter{
+// newConsonantConverter creates a new instance of consonantConverter.
+func newConsonantConverter() *consonantConverter {
+	return &consonantConverter{
 		vowels:     "aeiou",
 		consonants: "dgʤʒklmnptvʧŋɹʃðθ",
 	}
 }
 
 // dRule handles d, dz -- dd, z.
-func (cc *ConsonantConverter) dRule(word, ph string, pIdx int) string {
+func (cc *consonantConverter) dRule(word, ph string, pIdx int) string {
 	if pIdx+1 < len(ph) && ph[pIdx+1] == 'z' {
 		return "z"
 	} else if pIdx >= 1 && strings.ContainsAny(string(ph[pIdx-1]), cc.vowels) && (len(ph) <= 2 || !strings.ContainsAny(string(ph[pIdx-2]), cc.vowels)) {
@@ -29,7 +29,7 @@ func (cc *ConsonantConverter) dRule(word, ph string, pIdx int) string {
 }
 
 // gkptRule handles k, g, p, t -- kk, gg, pp, tt.
-func (cc *ConsonantConverter) gkptRule(word, ph string, pIdx int) string {
+func (cc *consonantConverter) gkptRule(word, ph string, pIdx int) string {
 	if len(ph) == 2 && pIdx == 1 {
 		return strings.Repeat(string(ph[pIdx]), 2)
 	} else if pIdx-1 >= 0 && pIdx+2 < len(ph) && ph[pIdx-1] == 'a' && ph[pIdx+1] == 'u' && ph[pIdx+2] == 'l' {
@@ -43,7 +43,7 @@ func (cc *ConsonantConverter) gkptRule(word, ph string, pIdx int) string {
 }
 
 // dgRule handles ʤ -- j, jj.
-func (cc *ConsonantConverter) dgRule(word, ph string, pIdx int) string {
+func (cc *consonantConverter) dgRule(word, ph string, pIdx int) string {
 	if pIdx >= 1 && strings.ContainsAny(string(ph[pIdx-1]), cc.vowels) {
 		if len(ph) <= 2 || (pIdx+1 < len(ph) && strings.ContainsAny(string(ph[pIdx+1]), cc.vowels)) {
 			return "j"
@@ -55,17 +55,17 @@ func (cc *ConsonantConverter) dgRule(word, ph string, pIdx int) string {
 }
 
 // gShortRule handles ʒ.
-func (cc *ConsonantConverter) gShortRule(word, ph string, pIdx int) string {
+func (cc *consonantConverter) gShortRule(word, ph string, pIdx int) string {
 	return "j"
 }
 
 // lRule handles l -- r.
-func (cc *ConsonantConverter) lRule(word, ph string, pIdx int) string {
+func (cc *consonantConverter) lRule(word, ph string, pIdx int) string {
 	return "r"
 }
 
 // mnRule handles m, n not followed by vowel -- N and y.
-func (cc *ConsonantConverter) mnRule(word, ph string, pIdx int) string {
+func (cc *consonantConverter) mnRule(word, ph string, pIdx int) string {
 	if pIdx > 0 && pIdx+1 < len(ph) && !strings.ContainsAny(string(ph[pIdx+1]), cc.vowels) && string(ph[pIdx+1]) != "y" {
 		return "N"
 	} else if pIdx == len(ph)-1 && string(ph[pIdx]) == "n" {
@@ -75,12 +75,12 @@ func (cc *ConsonantConverter) mnRule(word, ph string, pIdx int) string {
 }
 
 // vRule handles v -- b.
-func (cc *ConsonantConverter) vRule(word, ph string, pIdx int) string {
+func (cc *consonantConverter) vRule(word, ph string, pIdx int) string {
 	return "b"
 }
 
 // tshRule handles ʧ -- ch or cch.
-func (cc *ConsonantConverter) tshRule(word, ph string, pIdx int) string {
+func (cc *consonantConverter) tshRule(word, ph string, pIdx int) string {
 	if pIdx >= 1 && strings.ContainsAny(string(ph[pIdx-1]), cc.vowels) && (len(ph) <= 2 || !strings.ContainsAny(string(ph[pIdx-2]), cc.vowels)) {
 		return "cch"
 	}
@@ -89,7 +89,7 @@ func (cc *ConsonantConverter) tshRule(word, ph string, pIdx int) string {
 
 // ngRule handles ŋ -- N or Ng.
 // TODO: darling --> daariN
-func (cc *ConsonantConverter) ngRule(word, ph string, pIdx int) string {
+func (cc *consonantConverter) ngRule(word, ph string, pIdx int) string {
 	if pIdx+1 < len(ph) && ph[pIdx+1] == 'g' {
 		return "N"
 	} else if strings.Contains(word, "ng") {
@@ -99,12 +99,12 @@ func (cc *ConsonantConverter) ngRule(word, ph string, pIdx int) string {
 }
 
 // rRule handles ɹ.
-func (cc *ConsonantConverter) rRule(word, ph string, pIdx int) string {
+func (cc *consonantConverter) rRule(word, ph string, pIdx int) string {
 	return "r"
 }
 
 // shRule handles ʃ.
-func (cc *ConsonantConverter) shRule(word, ph string, pIdx int) string {
+func (cc *consonantConverter) shRule(word, ph string, pIdx int) string {
 	if pIdx >= 1 && strings.ContainsAny(string(ph[pIdx-1]), cc.vowels) && (len(ph) <= 2 || !strings.ContainsAny(string(ph[pIdx-2]), cc.vowels)) {
 		return "ssh"
 	}
@@ -112,17 +112,17 @@ func (cc *ConsonantConverter) shRule(word, ph string, pIdx int) string {
 }
 
 // thHakuonRule handles ð -- z.
-func (cc *ConsonantConverter) thHakuonRule(word, ph string, pIdx int) string {
+func (cc *consonantConverter) thHakuonRule(word, ph string, pIdx int) string {
 	return "z"
 }
 
 // thClearRule handles θ.
-func (cc *ConsonantConverter) thClearRule(word, ph string, iIdx int) string {
+func (cc *consonantConverter) thClearRule(word, ph string, iIdx int) string {
 	return "s"
 }
 
 // ConvertConsonant converts consonants.
-func (cc *ConsonantConverter) ConvertConsonant(word, ph string) string {
+func (cc *consonantConverter) ConvertConsonant(word, ph string) string {
 	consonantMap := map[string]func(string, string, int) string{
 		"d":  cc.dRule,
 		"g":  cc.gkptRule,
@@ -146,7 +146,7 @@ func (cc *ConsonantConverter) ConvertConsonant(word, ph string) string {
 	var result strings.Builder
 	pIdx := 0
 
-	phS, wordS := NewRuneString(ph), NewRuneString(word)
+	phS, wordS := newRuneString(ph), newRuneString(word)
 
 	for pIdx < phS.Len() {
 		// adds a vowel char as is

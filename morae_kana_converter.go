@@ -4,17 +4,17 @@ import (
 	"strings"
 )
 
-// MoraeKanaConverter converts morae to Kana characters.
-type MoraeKanaConverter struct {
+// moraeKanaConverter converts morae to Kana characters.
+type moraeKanaConverter struct {
 	vowels    string
 	moraMap   map[string]string
 	doubled   string
 	geminate  string
 }
 
-// NewMoraeKanaConverter creates a new instance of MoraeKanaConverter.
-func NewMoraeKanaConverter() *MoraeKanaConverter {
-	return &MoraeKanaConverter{
+// newMoraeKanaConverter creates a new instance of moraeKanaConverter.
+func newMoraeKanaConverter() *moraeKanaConverter {
+	return &moraeKanaConverter{
 		vowels:  "aeiou",
 		moraMap: map[string]string{
 			"a":   "ア", "i": "イ", "u": "ウ", "e": "エ", "o": "オ",
@@ -57,7 +57,7 @@ func NewMoraeKanaConverter() *MoraeKanaConverter {
 }
 
 // ConvertMorae converts morae to Kana characters.
-func (mkc *MoraeKanaConverter) ConvertMorae(morae string) string {
+func (mkc *moraeKanaConverter) ConvertMorae(morae string) string {
 	sounds := strings.Split(morae, ".")
 	result := mkc.moraMap[sounds[0]]
 	for idx := 1; idx < len(sounds); idx++ {

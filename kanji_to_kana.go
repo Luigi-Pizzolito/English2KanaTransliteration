@@ -10,12 +10,12 @@ import (
 //go:embed dict/kanjidic2_pronounce.json
 var kanjiMapFile string
 
-// KanjiToKana is a struct representing the Kanji to Kana converter
+// KanjiToKana struct holds the necessary functions for Kanji to Kana conversion
 type KanjiToKana struct {
 	kanaMap map[string]string
 }
 
-// NewKanjiToKana creates a new instance of KanjiToKana with the given map
+// NewKanjiToKana creates a new instance of KanjiToKana
 func NewKanjiToKana() *KanjiToKana {
 	k2k := KanjiToKana{}
 	if err := json.Unmarshal([]byte(kanjiMapFile), &k2k.kanaMap); err != nil {
@@ -25,12 +25,12 @@ func NewKanjiToKana() *KanjiToKana {
 	return &k2k
 }
 
-// Convert converts kanji strings into katakana strings using the map
-func (kk *KanjiToKana) Convert(kanji string) string {
+// Convert converts Kanji into Katakana
+func (k2k *KanjiToKana) Convert(kanji string) string {
 	var kana strings.Builder
 	for _, char := range kanji {
 		// Check if the character exists in the map
-		if val, ok := kk.kanaMap[string(char)]; ok {
+		if val, ok := k2k.kanaMap[string(char)]; ok {
 			kana.WriteString(val) // If yes, append the corresponding kana to the result
 		} else {
 			// If no mapping found, skip the character

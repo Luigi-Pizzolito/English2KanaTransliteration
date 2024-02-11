@@ -4,35 +4,35 @@ import (
 	"strings"
 )
 
-type VowelConverter struct {
+type vowelConverter struct {
 	vowels  string
 	vowsyms string
 }
 
-func NewVowelConverter() *VowelConverter {
-	return &VowelConverter{
+func newVowelConverter() *vowelConverter {
+	return &vowelConverter{
 		vowels:  "aeiou",
 		vowsyms: "aɑʌɚæeɛɪijɔoʊu",
 	}
 }
 
 // ajRule applies the rule for "aj" or "ɑj" && returns the replacement string.
-func (vc *VowelConverter) ajRule(word string, wIdx int) string {
+func (vc *vowelConverter) ajRule(word string, wIdx int) string {
 	return "ai"
 }
 
 // arRule applies the rule for "ɑɹ" && returns the replacement string.
-func (vc *VowelConverter) arRule(word string, wIdx int) string {
+func (vc *vowelConverter) arRule(word string, wIdx int) string {
 	return "aa"
 }
 
 // awRule applies the rule for "aw" or "ɑw" && returns the replacement string.
-func (vc *VowelConverter) awRule(word string, wIdx int) string {
+func (vc *vowelConverter) awRule(word string, wIdx int) string {
 	return "au" // oo?
 }
 
 // aShortRule applies the rule for "ɑ" && returns the replacement string.
-func (vc *VowelConverter) aShortRule(word string, wIdx int) string {
+func (vc *vowelConverter) aShortRule(word string, wIdx int) string {
 	if wIdx < len(word) && word[wIdx] == 'o' {
 		return "o"
 	}
@@ -40,12 +40,12 @@ func (vc *VowelConverter) aShortRule(word string, wIdx int) string {
 }
 
 // aLongRule applies the rule for "ɚ" && returns the replacement string.
-func (vc *VowelConverter) aLongRule(word string, wIdx int) string {
+func (vc *vowelConverter) aLongRule(word string, wIdx int) string {
 	return "aa"
 }
 
 // aeRule applies the rule for "æ" && returns the replacement string.
-func (vc *VowelConverter) aeRule(word string, wIdx int) string {
+func (vc *vowelConverter) aeRule(word string, wIdx int) string {
 	if wIdx < len(word) && wIdx >= 1 && (word[wIdx-1] == 'c' || word[wIdx-1] == 'g') {
 		return "ya"
 	}
@@ -53,7 +53,7 @@ func (vc *VowelConverter) aeRule(word string, wIdx int) string {
 }
 
 // hatRule applies the rule for "ʌ" && returns the replacement string.
-func (vc *VowelConverter) hatRule(word string, wIdx int) string {
+func (vc *vowelConverter) hatRule(word string, wIdx int) string {
 	if wIdx+1 < len(word) && word[wIdx] == 'o' && word[wIdx+1] == 'u' {
 		return "a"
 	} else if wIdx+1 < len(word) && word[wIdx] == 'i' && word[wIdx+1] == 'o' {
@@ -80,107 +80,107 @@ func (vc *VowelConverter) hatRule(word string, wIdx int) string {
 }
 
 // ejRule applies the rule for "ej" && returns the replacement string.
-func (vc *VowelConverter) ejRule(word string, wIdx int) string {
+func (vc *vowelConverter) ejRule(word string, wIdx int) string {
 	return "ei"
 }
 
 // erRule applies the rule for "ɛɹ" && returns the replacement string.
-func (vc *VowelConverter) erRule(word string, wIdx int) string {
+func (vc *vowelConverter) erRule(word string, wIdx int) string {
 	return "eaa"
 }
 
 // eRule applies the rule for "ɛ" && returns the replacement string.
-func (vc *VowelConverter) eRule(word string, wIdx int) string {
+func (vc *vowelConverter) eRule(word string, wIdx int) string {
 	return "e"
 }
 
 // irRule applies the rule for "ɪɹ" && returns the replacement string.
-func (vc *VowelConverter) irRule(word string, wIdx int) string {
+func (vc *vowelConverter) irRule(word string, wIdx int) string {
 	return "iaa"
 }
 
 // iirLongRule applies the rule for "iɹ" && returns the replacement string.
-func (vc *VowelConverter) iirLongRule(word string, wIdx int) string {
+func (vc *vowelConverter) iirLongRule(word string, wIdx int) string {
 	return "iaa"
 }
 
 // iLongRule applies the rule for "i" && returns the replacement string.
-func (vc *VowelConverter) iLongRule(word string, wIdx int) string {
+func (vc *vowelConverter) iLongRule(word string, wIdx int) string {
 	return "ii"
 }
 
 // iShortRule applies the rule for "ɪ" && returns the replacement string.
-func (vc *VowelConverter) iShortRule(word string, wIdx int) string {
+func (vc *vowelConverter) iShortRule(word string, wIdx int) string {
 	return "i"
 }
 
 // jaRule applies the rule for "jʌ" && returns the replacement string.
-func (vc *VowelConverter) jaRule(word string, wIdx int) string {
+func (vc *vowelConverter) jaRule(word string, wIdx int) string {
 	return "yaa"
 }
 
 // jaShortRule applies the rule for "jɑ" or "jæ" && returns the replacement string.
-func (vc *VowelConverter) jaShortRule(word string, wIdx int) string {
+func (vc *vowelConverter) jaShortRule(word string, wIdx int) string {
 	return "ya"
 }
 
 // jawRule applies the rule for "jaw" && returns the replacement string.
-func (vc *VowelConverter) jawRule(word string, wIdx int) string {
+func (vc *vowelConverter) jawRule(word string, wIdx int) string {
 	return "yoo"
 }
 
 // juRule applies the rule for "ju" && returns the replacement string.
-func (vc *VowelConverter) juRule(word string, wIdx int) string {
+func (vc *vowelConverter) juRule(word string, wIdx int) string {
 	return "yuu"
 }
 
 // juShortRule applies the rule for "jɚ" or "jʊ" && returns the replacement string.
-func (vc *VowelConverter) juShortRule(word string, wIdx int) string {
+func (vc *vowelConverter) juShortRule(word string, wIdx int) string {
 	return "yu"
 }
 
 // jiRule applies the rule for "ji" && returns the replacement string.
-func (vc *VowelConverter) jiRule(word string, wIdx int) string {
+func (vc *vowelConverter) jiRule(word string, wIdx int) string {
 	return "ii"
 }
 
 // jeRule applies the rule for "jɛ" or "jɪ" && returns the replacement string.
-func (vc *VowelConverter) jeRule(word string, wIdx int) string {
+func (vc *vowelConverter) jeRule(word string, wIdx int) string {
 	return "ie"
 }
 
 // jejRule applies the rule for "jej" && returns the replacement string.
-func (vc *VowelConverter) jejRule(word string, wIdx int) string {
+func (vc *vowelConverter) jejRule(word string, wIdx int) string {
 	return "yei"
 }
 
 // jowRule applies the rule for "jow" && returns the replacement string.
-func (vc *VowelConverter) jowRule(word string, wIdx int) string {
+func (vc *vowelConverter) jowRule(word string, wIdx int) string {
 	return "yoo"
 }
 
 // joRule applies the rule for "jɔ" && returns the replacement string.
-func (vc *VowelConverter) joRule(word string, wIdx int) string {
+func (vc *vowelConverter) joRule(word string, wIdx int) string {
 	return "yo"
 }
 
 // ojRule applies the rule for "ɔj" or "ʌj" && returns the replacement string.
-func (vc *VowelConverter) ojRule(word string, wIdx int) string {
+func (vc *vowelConverter) ojRule(word string, wIdx int) string {
 	return "oi"
 }
 
 // orRule applies the rule for "ɔɹ" && returns the replacement string.
-func (vc *VowelConverter) orRule(word string, wIdx int) string {
+func (vc *vowelConverter) orRule(word string, wIdx int) string {
 	return "oo"
 }
 
 // owRule applies the rule for "ow" && returns the replacement string.
-func (vc *VowelConverter) owRule(word string, wIdx int) string {
+func (vc *vowelConverter) owRule(word string, wIdx int) string {
 	return "oo"
 }
 
 // oRule applies the rule for "ɔ" && returns the replacement string.
-func (vc *VowelConverter) oRule(word string, wIdx int) string {
+func (vc *vowelConverter) oRule(word string, wIdx int) string {
 	if wIdx+1 < len(word) && word[wIdx] == 'a' && word[wIdx+1] == 'u' {
 		return "oo"
 	}
@@ -188,37 +188,37 @@ func (vc *VowelConverter) oRule(word string, wIdx int) string {
 }
 
 // jurRule applies the rule for "jʊɹ" && returns the replacement string.
-func (vc *VowelConverter) jurRule(word string, wIdx int) string {
+func (vc *vowelConverter) jurRule(word string, wIdx int) string {
 	return "yuaa"
 }
 
 // jsiRule applies the rule for "jsi" && returns the replacement string.
-func (vc *VowelConverter) jsiRule(word string, wIdx int) string {
+func (vc *vowelConverter) jsiRule(word string, wIdx int) string {
 	return "ji"
 }
 
 // urRule applies the rule for "ʊɹ" && returns the replacement string.
-func (vc *VowelConverter) urRule(word string, wIdx int) string {
+func (vc *vowelConverter) urRule(word string, wIdx int) string {
 	return "uaa"
 }
 
 // uShortRule applies the rule for "ʊ" && returns the replacement string.
-func (vc *VowelConverter) uShortRule(word string, wIdx int) string {
+func (vc *vowelConverter) uShortRule(word string, wIdx int) string {
 	return "u"
 }
 
 // uLongRule applies the rule for "u" && returns the replacement string.
-func (vc *VowelConverter) uLongRule(word string, wIdx int) string {
+func (vc *vowelConverter) uLongRule(word string, wIdx int) string {
 	return "uu"
 }
 
 // jRule applies the rule for the last "j" && returns the replacement string.
-func (vc *VowelConverter) jRule(word string, wIdx int) string {
+func (vc *vowelConverter) jRule(word string, wIdx int) string {
 	return "ji"
 }
 
 // ConvertVowel converts vowels in a word according to phonetic rules && returns the converted string.
-func (vc *VowelConverter) ConvertVowel(word, ph string) string {
+func (vc *vowelConverter) ConvertVowel(word, ph string) string {
 	vowelMap := map[string]func(word string, wIdx int) string{
 		"aj":  vc.ajRule,
 		"ɑj": vc.ajRule,
@@ -265,7 +265,7 @@ func (vc *VowelConverter) ConvertVowel(word, ph string) string {
 	var result strings.Builder
 	wIdx, pIdx := 0, 0
 	
-	phS, wordS := NewRuneString(ph), NewRuneString(word)
+	phS, wordS := newRuneString(ph), newRuneString(word)
 
 	for pIdx < phS.Len() {
 		// skips consnant in a word

@@ -5,20 +5,20 @@ import (
 	"fmt"
 )
 
-// MoraeCreator creates morae from phonetics.
-type MoraeCreator struct {
+// moraeCreator creates morae from phonetics.
+type moraeCreator struct {
 	vowels string
 }
 
-// NewMoraeCreator creates a new instance of MoraeCreator.
-func NewMoraeCreator() *MoraeCreator {
-	return &MoraeCreator{
+// newMoraeCreator creates a new instance of moraeCreator.
+func newMoraeCreator() *moraeCreator {
+	return &moraeCreator{
 		vowels: "aeiou",
 	}
 }
 
 // CreateMorae creates morae from phonetics.
-func (mc *MoraeCreator) CreateMorae(ph string) string {
+func (mc *moraeCreator) CreateMorae(ph string) string {
 	result := string(ph[0]) // Add the first character to the result
 	for pIdx, r := range ph[1:] {
 		// Increment pIdx by 1 to match the index of the current rune
@@ -47,7 +47,7 @@ func (mc *MoraeCreator) CreateMorae(ph string) string {
 }
 
 // isVowel checks if a character is a vowel.
-func (mc *MoraeCreator) isVowel(char string) bool {
+func (mc *moraeCreator) isVowel(char string) bool {
 	for _, v := range mc.vowels {
 		if string(v) == char {
 			return true

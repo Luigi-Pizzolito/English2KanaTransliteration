@@ -89,7 +89,7 @@ This needs some work, it just takes the most common pronouciation of each Kanji 
 #### Hiragana2Katakana
 ```go
 // Create an instance of HiraganaToKana
-hiraganaToKana := kanatrans.NewHiraganaToKatakana()
+hiraganaToKana := kanatrans.NewHiraganaToKana()
 // Usage
 kana := hiraganaToKana.Convert("こんにちは")
 ```
