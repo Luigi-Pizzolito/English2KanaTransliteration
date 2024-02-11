@@ -62,6 +62,10 @@ Hello! こんにちは~ ヘロー, miki松原。
 
 #### All2Katakana
 ```go
+// Create an instance of AllToKana
+allToKana := NewAllToKana()
+// Usage
+kana := allToKana.Convert("Hello! watashiwa 初音ミク.")
 ```
 
 #### Eng2Katakana
