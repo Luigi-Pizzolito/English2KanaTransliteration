@@ -7,19 +7,8 @@ import (
 )
 
 func main() {
-	// Create an instance of EngToKana
-	engToKana := NewEngToKana()
-	// Create an instance of KanjiToKana
-	kanjiToKana := NewKanjiToKana()
-	// Create an instance of GanaToKana
-	hiraganaToKana := NewHiraganaToKatakana()
-	// Create an instance of KanjiSplitter
-	kanjiSplitter := NewKanjiSplitter(
-		kanjiToKana.Convert,			// Kanji callback
-		hiraganaToKana.Convert,			// Gana & Kana callback
-		engToKana.TranscriptSentence,	// English callback
-		convertToJapanesePunctuation,	// Punctuation callback
-	)
+	// Create an instance of AllToKana
+	allToKana := NewAllToKana()
 
 	// Listen to stdin indefinitely
 	reader := bufio.NewReader(os.Stdin)
@@ -30,7 +19,7 @@ func main() {
 		}
 
 		// Call convertString function with the accumulated line
-		result := kanjiSplitter.SeparateAndProcess(line)
+		result := allToKana.Convert(line)
 
 		// Output the result
 		fmt.Print(result+"\n")
