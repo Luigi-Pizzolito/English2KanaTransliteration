@@ -1,4 +1,4 @@
-package main
+package kanatrans
 
 type AllToKana struct {
 	e2k		*EngToKana

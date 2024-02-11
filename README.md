@@ -19,6 +19,7 @@ Below is an example go file to test this module. It reads input from `stdin`, co
 package main
 
 import (
+	"github.com/Luigi-Pizzolito/English2KanaTransliteration"
 	"bufio"
 	"fmt"
 	"os"
@@ -26,7 +27,7 @@ import (
 
 func main() {
 	// Create an instance of AllToKana
-	allToKana := NewAllToKana()
+	allToKana := kanatrans.NewAllToKana()
 
 	// Listen to stdin indefinitely
 	reader := bufio.NewReader(os.Stdin)
@@ -63,7 +64,7 @@ Hello! こんにちは~ ヘロー, miki松原。
 #### All2Katakana
 ```go
 // Create an instance of AllToKana
-allToKana := NewAllToKana()
+allToKana := kanatrans.NewAllToKana()
 // Usage
 kana := allToKana.Convert("Hello! watashiwa 初音ミク.")
 ```
@@ -71,7 +72,7 @@ kana := allToKana.Convert("Hello! watashiwa 初音ミク.")
 #### Eng2Katakana
 ```go
 // Create an instance of EngToKana
-engToKana := NewEngToKana()
+engToKana := kanatrans.NewEngToKana()
 // Usage
 kana := engToKana.TranscriptSentence("Hello World!")
 ```
@@ -79,7 +80,7 @@ kana := engToKana.TranscriptSentence("Hello World!")
 #### Kanji2Katakana
 ```go
 // Create an instance of KanjiToKana
-kanjiToKana := NewKanjiToKana()
+kanjiToKana := kanatrans.NewKanjiToKana()
 // Usage
 kana := kanjiToKana.Convert("初音ミク")
 ```
@@ -88,7 +89,7 @@ This needs some work, it just takes the most common pronouciation of each Kanji 
 #### Hiragana2Katakana
 ```go
 // Create an instance of HiraganaToKana
-hiraganaToKana := NewHiraganaToKatakana()
+hiraganaToKana := kanatrans.NewHiraganaToKatakana()
 // Usage
 kana := hiraganaToKana.Convert("こんにちは")
 ```
@@ -96,7 +97,7 @@ kana := hiraganaToKana.Convert("こんにちは")
 #### Romaji2Katakana
 ```go
 // Create an instance of RomajiToKana
-romajiToKana := NewRomajiToKana()
+romajiToKana := kanatrans.NewRomajiToKana()
 // Usage
 kana := romajiToKana.Convert("kita kita desu")
 ```
@@ -104,7 +105,7 @@ kana := romajiToKana.Convert("kita kita desu")
 #### ConvertPunctuation
 ```go
 // Usage
-japanesePunctuation := convertToJapanesePunctuation("Hello, World!")
+japanesePunctuation := kanatrans.convertToJapanesePunctuation("Hello, World!")
 ```
 
 ### Note for using with Japanese-only text-to-speech (TTS)
@@ -113,23 +114,23 @@ This module is intended to allow TTS which only support Japanese to speak englis
 To use this module for such TTS input, you may enable *strict input cleaning mode* (only Japanese comma and stop on output) by passing a bool in the initialiser for `EngToKana`, `RomajiToKana` and `AllToKana` classes:
 ```go
 // Create an instance of AllToKana with strict punctuation output
-allToKana := NewAllToKana(true)
+allToKana := kanatrans.NewAllToKana(true)
 ```
 ```go
 // Create an instance of EngToKana with strict punctuation output
-engToKana := NewEngToKana(true)
+engToKana := kanatrans.NewEngToKana(true)
 ```
 ```go
 // Create an instance of RomajiToKana with strict punctuation output
-romajiToKana := NewRomajiToKana(true)
+romajiToKana := kanatrans.NewRomajiToKana(true)
 ```
-You may also use the function `convertToJapanesePunctuationRestricted` instead of `convertToJapanesePunctuation`.
+You may also use the function `kanatrans.convertToJapanesePunctuationRestricted` instead of `kanatrans.convertToJapanesePunctuation`.
 
 ### Custom callbacks to proccess Kanji, Kana, English & Punctuation
 Internally, the `AllToKana` proccess function uses a `KanjiSplitter` class to call `func(string) string` functions which handle Kanji, Kana, English and Punctuation respectively:
 ```go
 // Create an instance of KanjiSplitter with proccesing callbacks
-kanjiSplitter := NewKanjiSplitter(
+kanjiSplitter := kanatrans.NewKanjiSplitter(
 	kanjiToKana.Convert,					// Kanji callback
 	hiraganaToKana.Convert,					// Gana & Kana callback
 	engToKana.TranscriptSentence,			// English callback
