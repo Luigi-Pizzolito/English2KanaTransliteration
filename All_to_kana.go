@@ -29,9 +29,9 @@ func NewAllToKana(strictPunct ...bool) *AllToKana {
 	// Determine punctuation converter to use
 	var puncFP func(string) string
 	if strict {
-		puncFP = convertToJapanesePunctuationRestricted
+		puncFP = ConvertToJapanesePunctuationRestricted
 	} else {
-		puncFP = convertToJapanesePunctuation
+		puncFP = ConvertToJapanesePunctuation
 	}
 	// Create an instance of KanjiSplitter
 	a2k.ks = NewKanjiSplitter(

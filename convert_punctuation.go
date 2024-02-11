@@ -5,7 +5,7 @@ import (
 )
 
 // Function to convert normal punctuations to their Japanese equivalents
-func convertToJapanesePunctuation(str string) string {
+func ConvertToJapanesePunctuation(str string) string {
 	punctuationMap := map[rune]string{
 		',': "、",
 		'.': "。",
@@ -36,7 +36,7 @@ func convertToJapanesePunctuation(str string) string {
 }
 
 // Function to convert normal punctuations to their Japanese equivalents
-func convertToJapanesePunctuationRestricted(str string) string {
+func ConvertToJapanesePunctuationRestricted(str string) string {
 	punctuationMap := map[rune]string{
 		',': "、",
 		'.': "。",

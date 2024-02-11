@@ -50,7 +50,7 @@ func (ce *cleanEnglish) simpleClean(line string, processCallback func(string)str
 		if segment != "" {
 			if strings.HasSuffix(segment, "?") || strings.HasSuffix(segment, "!") || strings.HasSuffix(segment, ";") || strings.HasSuffix(segment, ":") || strings.HasSuffix(segment, "-") || strings.HasSuffix(segment, "~") || strings.HasSuffix(segment, ",") {
 				segments = append(segments, stringSegment{Text: segment[:len(segment)-1], Type: "text"})
-				segments = append(segments, stringSegment{Type: convertToJapanesePunctuation(string(ce.getLastRune(segment)))})
+				segments = append(segments, stringSegment{Type: ConvertToJapanesePunctuation(string(ce.getLastRune(segment)))})
 			} else if strings.HasSuffix(segment, ".") {
 				segments = append(segments, stringSegment{Text: segment[:len(segment)-1], Type: "text"})
 				segments = append(segments, stringSegment{Type: "。"})

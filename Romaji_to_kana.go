@@ -29,13 +29,13 @@ func (r2k *RomajiToKana) Convert(s string) string {
 
 	if !r2k.strict {
 		// non-strict mode
-		out = convertToJapanesePunctuation(out)
+		out = ConvertToJapanesePunctuation(out)
 		return out
 	}
 	
 	// strict mode
 	out = r2k.removeNonKatakana(out)
-	out = convertToJapanesePunctuationRestricted(out)
+	out = ConvertToJapanesePunctuationRestricted(out)
 	return out
 }
 

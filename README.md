@@ -67,6 +67,7 @@ Hello! こんにちは~ ヘロー, miki松原。
 allToKana := kanatrans.NewAllToKana()
 // Usage
 kana := allToKana.Convert("Hello! watashiwa 初音ミク.")
+// -> ヘロー！　ワタシワ　ショオンミク。
 ```
 
 #### Eng2Katakana
@@ -75,6 +76,7 @@ kana := allToKana.Convert("Hello! watashiwa 初音ミク.")
 engToKana := kanatrans.NewEngToKana()
 // Usage
 kana := engToKana.TranscriptSentence("Hello World!")
+// -> ヘローワールド
 ```
 
 #### Kanji2Katakana
@@ -82,7 +84,8 @@ kana := engToKana.TranscriptSentence("Hello World!")
 // Create an instance of KanjiToKana
 kanjiToKana := kanatrans.NewKanjiToKana()
 // Usage
-kana := kanjiToKana.Convert("初音ミク")
+kana := kanjiToKana.Convert("初音")
+// -> ショオン
 ```
 This needs some work, it just takes the most common pronouciation of each Kanji instead of the correct one for the context. Pull requests are welcome!
 
@@ -92,6 +95,7 @@ This needs some work, it just takes the most common pronouciation of each Kanji 
 hiraganaToKana := kanatrans.NewHiraganaToKana()
 // Usage
 kana := hiraganaToKana.Convert("こんにちは")
+// -> コンニチハ
 ```
 
 #### Romaji2Katakana
@@ -100,12 +104,14 @@ kana := hiraganaToKana.Convert("こんにちは")
 romajiToKana := kanatrans.NewRomajiToKana()
 // Usage
 kana := romajiToKana.Convert("kita kita desu")
+// -> キタ　キタ　デス
 ```
 
 #### ConvertPunctuation
 ```go
 // Usage
-japanesePunctuation := kanatrans.convertToJapanesePunctuation("Hello, World!")
+japanesePunctuation := kanatrans.ConvertToJapanesePunctuation("Hello, World!")
+// -> Hello、 World！
 ```
 
 ### Note for using with Japanese-only text-to-speech (TTS)
@@ -124,7 +130,7 @@ engToKana := kanatrans.NewEngToKana(true)
 // Create an instance of RomajiToKana with strict punctuation output
 romajiToKana := kanatrans.NewRomajiToKana(true)
 ```
-You may also use the function `kanatrans.convertToJapanesePunctuationRestricted` instead of `kanatrans.convertToJapanesePunctuation`.
+You may also use the function `kanatrans.ConvertToJapanesePunctuationRestricted` instead of `kanatrans.ConvertToJapanesePunctuation`.
 
 ### Custom callbacks to proccess Kanji, Kana, English & Punctuation
 Internally, the `AllToKana` proccess function uses a `KanjiSplitter` class to call `func(string) string` functions which handle Kanji, Kana, English and Punctuation respectively:
@@ -134,7 +140,7 @@ kanjiSplitter := kanatrans.NewKanjiSplitter(
 	kanjiToKana.Convert,					// Kanji callback
 	hiraganaToKana.Convert,					// Gana & Kana callback
 	engToKana.TranscriptSentence,			// English callback
-	convertToJapanesePunctuation,			// Punctuation callback
+	ConvertToJapanesePunctuation,			// Punctuation callback
 )
 ```
 If required, you may use a `KanjiSplitter` with custom callback functions to provide different processing.
