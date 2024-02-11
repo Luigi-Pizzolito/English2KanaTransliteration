@@ -97,6 +97,7 @@ func (e *EngToKana) transcriptCleanSentenceFragment(line string) string {
 		result.WriteString(katakanaWords)
 
 		// TODO: Recover func call in case of E_DIC
+		// TODO: Add and try romaji_to_kana.go
 	}
 	return result.String()
 }

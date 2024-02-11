@@ -26,7 +26,6 @@ func (ce *CleanEnglish) Clean(line string, processCallback func(string)string) s
 }
 
 // Function to perform simple cleaning
-// TODO: Implement this function handing replacements from english to japanese punctuation
 func (ce *CleanEnglish) simpleClean(line string, processCallback func(string)string) string {
 	// Initial input clean
 	inputString := ce.removeNonAlphaKeepSomePuncMore(line)
